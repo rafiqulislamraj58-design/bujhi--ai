@@ -17,15 +17,15 @@ connectDB();
 const app: Application = express();
 
 
-// 🚀 CORS Configuration Updated
+// 🚀 Bulletproof CORS Configuration
 app.use(cors({
-    origin: [
-        'http://localhost:3000', 
-        process.env.CLIENT_URL || '' 
-    ],
-    credentials: true,
+    origin: function (origin, callback) {
+       
+        callback(null, true);
+    },
+    credentials: true, // Session cookie 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 app.get('/', (req, res) => {
     res.status(200).send('🚀 Bujhi AI Server is Running Successfully!');

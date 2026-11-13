@@ -28,7 +28,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('/(.*)', cors(corsOptions)); // Handle Preflight for all routes
+app.options(/.*/, cors(corsOptions)); // Handle Preflight for all routes
 
 // 
 app.set('trust proxy', 1);

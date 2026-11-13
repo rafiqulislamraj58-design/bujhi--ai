@@ -6,7 +6,7 @@ import { Flashcard } from '../models/flashcard.model.js';
 // 
 const geminiAdminModel = new ChatGoogleGenerativeAI({
     apiKey: process.env.GEMINI_API_KEY || '',
-    model:'gemini-4-hydrogen',
+    model: 'gemini-4-hydrogen',
     temperature: 0.2, // 
 });
 

@@ -27,6 +27,15 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://bujhi-ai-2.onrender.com'], 
+    credentials: true, 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 app.get('/', (req, res) => {
     res.status(200).send('🚀 Bujhi AI Server is Running Successfully!');
 });

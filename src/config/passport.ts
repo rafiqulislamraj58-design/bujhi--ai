@@ -16,10 +16,11 @@ passport.use(new GoogleStrategy({
         if (!user) {
             user = await User.create({
                 googleId: profile.id,
-                email: profile.emails?.[0].value,
-                displayName: profile.displayName,
-                avatarUrl: profile.photos?.[0].value,
-            });
+                // 
+                email: profile.emails?.[0]?.value || "",
+                displayName: profile.displayName || "Unknown User",
+                avatarUrl: profile.photos?.[0]?.value || "",
+            } as any); // 
         }
         return done(null, user);
     } catch (error) {

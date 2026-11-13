@@ -28,7 +28,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle Preflight for all routes
+app.options('/(.*)', cors(corsOptions)); // Handle Preflight for all routes
 
 // 
 app.set('trust proxy', 1);
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     res.status(200).send('🚀 Bujhi AI Server is Running Successfully!');
 });
 
-// 🚀 3. Session Setup (Cross-origin কুকির জন্য sameSite ফিক্স করা হয়েছে)
+// 🚀 3. Session Setup 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'bujhi_ai_super_secret',
     resave: false,

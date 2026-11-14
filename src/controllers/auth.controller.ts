@@ -1,21 +1,16 @@
 import type { Request, Response, NextFunction } from 'express';
-import User from '../models/user.model.js';
+import User from '../models/user.model.js'; // <-- 
 
-// 🚀 1. GOOGLE AUTH CALLBACK (SMART REDIRECT ADDED)
-export const googleAuthCallback = (req: Request, res: Response): void => {
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-    
-
-    const user = req.user as any; 
-
-    if (user && (user.role === 'admin' || user.role === 'Admin')) {
-        res.redirect(`${clientUrl}/admin`); 
-    } else {
-        res.redirect(`${clientUrl}/dashboard`); 
-    }
+// GOOGLE AUTH CALLBACK
+export const googleAuthCallback = (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        message: 'Google Login Successful! 🚀',
+        user: req.user
+    });
 };
 
-// 🚀 2. FETCH CLIENT
+// FETCH CLIENT
 export const getMe = (req: Request, res: Response): void => {
     if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
@@ -24,26 +19,22 @@ export const getMe = (req: Request, res: Response): void => {
     res.status(200).json({ success: true, user: req.user });
 };
 
-// 🚀 3. LOGOUT SESSION (IMPROVED)
+// LOGOUT SESSION
 export const logout = (req: Request, res: Response, next: NextFunction): void => {
     req.logout((err) => {
         if (err) return next(err);
         
-        req.session.destroy((destroyErr) => {
-            if (destroyErr) {
-                console.error("Session destroy error:", destroyErr);
-                return next(destroyErr);
-            }
-            
-            res.clearCookie('connect.sid', { path: '/' }); 
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid'); //
             res.status(200).json({ success: true, message: 'Logged out successfully! 👋' });
         });
     });
 };
 
-// 🚀 4. UPDATE ACADEMIC PROFILE (IMPROVED)
+// UPDATE ACADEMIC PROFILE
 export const updateProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+        // req.user 
         const userId = (req.user as any)?._id; 
 
         if (!userId) {
@@ -67,6 +58,7 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
             { new: true, runValidators: true } 
         );
 
+        // 
         if (!updatedUser) {
             res.status(404).json({ success: false, message: 'User not found in database' });
             return;
@@ -79,8 +71,6 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
         });
 
     } catch (error: any) {
-       
-        console.error("Profile Update Error:", error);
         res.status(500).json({ success: false, message: error.message || 'Internal Server Error' }); 
     }
 };

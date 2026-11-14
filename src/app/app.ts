@@ -17,20 +17,26 @@ const app: Application = express();
 
 // 🚀 Nuclear CORS Option (Custom Middleware) - No more 'cors' package needed!
 app.use((req: Request, res: Response, next: NextFunction): void => {
-    const allowedOrigins = ['https://buji-ai-frontend.vercel.app', 'https://bujhi-ai-2.onrender.com'];
+    // 👇 Localhost এবং Vercel দুইটাই রাখলাম যেন পিসিতে টেস্ট করতেও কোনো সমস্যা না হয়
+    const allowedOrigins = [
+        'http://localhost:3000', 
+        'https://buji-ai-frontend.vercel.app', 
+        'https://bujhi-ai-2.onrender.com'
+    ];
     const origin = req.headers.origin as string;
 
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     } else {
-        res.setHeader('Access-Control-Allow-Origin', 'https://buji-ai-frontend.vercel.app/',);
+        // 🚨 লিংকের শেষের স্ল্যাশ (/) কেটে দিয়েছি, এটা CORS এর জন্য মারাত্মক ভুল ছিল!
+        res.setHeader('Access-Control-Allow-Origin', 'https://buji-ai-frontend.vercel.app');
     }
 
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
 
-    // Preflight (OPTIONS) রিকোয়েস্ট আসলে সাথে সাথে 200 OK রেসপন্স দিয়ে বিদায় করো
+    // Preflight (OPTIONS) রিকোয়েস্ট আসলে সাথে সাথে 200 OK রেসপন্স দিয়ে বিদায় করো
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;

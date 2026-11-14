@@ -1,18 +1,11 @@
 import type { Request, Response, NextFunction } from 'express';
 import User from '../models/user.model.js';
 
-// 🚀 1. GOOGLE AUTH CALLBACK (SMART REDIRECT)
+// 🚀 1. GOOGLE AUTH CALLBACK (REDIRECT TO HOME PAGE)
 export const googleAuthCallback = (req: Request, res: Response): void => {
-
     const clientUrl = process.env.CLIENT_URL || 'https://buji-ai-frontend.vercel.app';
-    const user = req.user as any; 
 
-  
-    if (user && (user.role === 'admin' || user.role === 'Admin')) {
-        res.redirect(`${clientUrl}/admin`); 
-    } else {
-        res.redirect(`${clientUrl}/dashboard`); 
-    }
+    res.redirect(`${clientUrl}/`); 
 };
 
 // 🚀 2. FETCH CLIENT

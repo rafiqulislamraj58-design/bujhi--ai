@@ -181,29 +181,29 @@ const generateAIResponse = async (
     question: string
 ): Promise<string> => {
     
-    // ১. ডেটাবেস থেকে আগের চ্যাট হিস্ট্রি খুঁজে বের করা
+    // 
     let chatRecord = await ChatHistory.findOne({ sessionId });
     
     let history: BaseMessage[] = [];
 
     if (chatRecord) {
-        // ডেটাবেসের মেসেজগুলোকে LangChain এর ফরম্যাটে কনভার্ট করা
+        //
         history = chatRecord.messages.map(msg => 
             msg.role === 'user' ? new HumanMessage(msg.content) : new AIMessage(msg.content)
         );
     } else {
-        // নতুন সেশন হলে ডেটাবেসে এন্ট্রি তৈরি করা
+        //
         chatRecord = new ChatHistory({ sessionId, messages: [] });
     }
 
-    // ২. AI কে পাঠানোর জন্য মেসেজ রেডি করা
+    // 
     const messages: BaseMessage[] = [
         new SystemMessage(SYSTEM_PROMPT),
         ...history,
         new HumanMessage(question),
     ];
 
-    // ৩. Groq (Llama) থেকে উত্তর আনা
+    // 
     const response = await modelWithFallback.invoke(messages);
     const answer = extractAIText(response.content);
 
@@ -211,11 +211,11 @@ const generateAIResponse = async (
         throw new Error("AI generated an empty response");
     }
 
-    // ৪. ডেটাবেসে নতুন প্রশ্ন এবং উত্তর সেভ করা (Push to array)
+    // 
     chatRecord.messages.push({ role: 'user', content: question });
     chatRecord.messages.push({ role: 'ai', content: answer });
 
-    // হিস্ট্রি বেশি বড় হয়ে গেলে শেষের ২০টা মেসেজ রাখা (যাতে ডেটাবেস ভারী না হয়)
+    // 
     if (chatRecord.messages.length > 20) {
         chatRecord.messages = chatRecord.messages.slice(-20);
     }

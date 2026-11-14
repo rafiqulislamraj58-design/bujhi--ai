@@ -1,11 +1,18 @@
 import type { Request, Response, NextFunction } from 'express';
 import User from '../models/user.model.js';
 
-// 🚀 1. GOOGLE AUTH CALLBACK (FIXED)
+// 🚀 1. GOOGLE AUTH CALLBACK (SMART REDIRECT ADDED)
 export const googleAuthCallback = (req: Request, res: Response): void => {
-
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-    res.redirect(`${clientUrl}/dashboard`);
+    
+
+    const user = req.user as any; 
+
+    if (user && (user.role === 'admin' || user.role === 'Admin')) {
+        res.redirect(`${clientUrl}/admin`); 
+    } else {
+        res.redirect(`${clientUrl}/dashboard`); 
+    }
 };
 
 // 🚀 2. FETCH CLIENT

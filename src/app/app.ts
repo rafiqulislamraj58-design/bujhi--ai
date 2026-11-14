@@ -17,13 +17,13 @@ const app: Application = express();
 
 // 🚀 Nuclear CORS Option (Custom Middleware) - No more 'cors' package needed!
 app.use((req: Request, res: Response, next: NextFunction): void => {
-    const allowedOrigins = ['http://localhost:3000', 'https://bujhi-ai-2.onrender.com'];
+    const allowedOrigins = ['https://buji-ai-frontend.vercel.app', 'https://bujhi-ai-2.onrender.com'];
     const origin = req.headers.origin as string;
 
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     } else {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.setHeader('Access-Control-Allow-Origin', 'https://buji-ai-frontend.vercel.app/',);
     }
 
     res.setHeader('Access-Control-Allow-Credentials', 'true');

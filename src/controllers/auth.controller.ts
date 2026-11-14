@@ -17,12 +17,14 @@ export const getMe = (req: Request, res: Response): void => {
     res.status(200).json({ success: true, user: req.user });
 };
 
-// 🚀 3. LOGOUT SESSION (IMPROVED)
+// 🚀 3. LOGOUT SESSION (IMPROVED & TYPESCRIPT FIXED)
 export const logout = (req: Request, res: Response, next: NextFunction): void => {
-    req.logout((err) => {
+    // 🚀 FIX: এখানে err এর সাথে `: any` বসিয়েছি
+    req.logout((err: any) => {
         if (err) return next(err);
         
-        req.session.destroy((destroyErr) => {
+        // 🚀 FIX: এখানে destroyErr এর সাথে `: any` বসিয়েছি
+        req.session.destroy((destroyErr: any) => {
             if (destroyErr) {
                 console.error("Session destroy error:", destroyErr);
                 return next(destroyErr);
